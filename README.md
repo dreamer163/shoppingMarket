@@ -1,5 +1,9 @@
 # shoppingMarket
 基于SpringbootSSM框架shopping购物商城
+前端端口8082
+后端端口8084
+
+图片显示用的tomcat启动当成一个图片显示的服务器
 
 1.后端管理员登录图
 ![JS{}ER@%Z$L0V Q@LQ)PV{X](https://user-images.githubusercontent.com/56583146/233376709-9411840f-d381-464a-8d20-66951d34a2fe.png)
