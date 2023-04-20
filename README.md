@@ -10,7 +10,8 @@
 (3)![IX_)F Z@ISGPX@V5~K}I$OB](https://user-images.githubusercontent.com/56583146/233377306-9ffd63fa-4554-4257-b3a4-29bfcbd541ec.png)
 
 3.前端买家用户登录图
-![Uploading 05TVRX1Q{1Q8[{0[U(LHTPE.png…]()
+![05TVRX1Q{1Q8 {0 U(LHTPE](https://user-images.githubusercontent.com/56583146/233380855-5d106310-0731-4b99-9696-23c23f363676.png)
+
 
 4.shopping商城主页图
 (1)![PT)9$4E~O8~5 JN{60R7SDY](https://user-images.githubusercontent.com/56583146/233377771-1246fd50-054d-4f91-8547-99bbcca6bd27.png)
