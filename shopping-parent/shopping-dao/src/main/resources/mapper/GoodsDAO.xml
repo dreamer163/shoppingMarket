@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.GoodsDAO">
+
+    <resultMap id="BaseResultMap" type="com.sfh.shopping.model.Goods">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="picUrl" column="pic_url" jdbcType="VARCHAR"/>
+        <result property="spuNo" column="spu_no" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="markPrice" column="mark_price" jdbcType="DECIMAL"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="place" column="place" jdbcType="VARCHAR"/>
+        <result property="bestSeller" column="best_seller" jdbcType="BIT"/>
+        <result property="newProduct" column="new_product" jdbcType="BIT"/>
+        <result property="takeOff" column="take_off" jdbcType="BIT"/>
+        <result property="detail" column="detail" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <association property="brand" column="brand_id" select="com.sfh.shopping.dao.BrandDAO.selectByPrimaryKey"/>
+        <!--category-->
+        <association property="category" column="category_id" select="com.sfh.shopping.dao.CategoryDAO.findById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,pic_url,spu_no,
+        name,category_id,brand_id,
+        mark_price,price,place,
+        best_seller,new_product,take_off,
+        description,create_time,update_time,detail,is_delete
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_goods
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_goods
+        <where>
+            <if test="name!=null and name !='' ">
+                <bind name="nameLike" value="'%'+name+'%'"/>
+                and name like #{nameLike}
+            </if>
+            <if test="bestSeller!=null">
+                and best_seller = #{bestSeller}
+            </if>
+            <if test="newProduct !=null">
+                and new_product = #{newProduct}
+            </if>
+            <if test="takeOff != null">
+                and take_off = #{takeOff}
+            </if>
+            <if test="brand!=null">
+                and brand_id = #{brand.id}
+            </if>
+            <if test="category!=null">
+                and category_id = #{category.id}
+            </if>
+            <if test="isDelete!=null">
+                and is_delete = #{isDelete}
+            </if>
+
+        </where>
+        order by id
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_goods
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.sfh.shopping.model.Goods"
+            useGeneratedKeys="true">
+        insert into t_goods
+        ( id, pic_url, spu_no
+        , name, category_id, brand_id
+        , mark_price, price, place
+        , best_seller, new_product, take_off
+        , description, create_time, update_time,detail)
+        values ( #{id,jdbcType=INTEGER}, #{picUrl,jdbcType=VARCHAR}, #{spuNo,jdbcType=VARCHAR}
+               , #{name,jdbcType=VARCHAR}, #{category.id,jdbcType=INTEGER}, #{brand.id,jdbcType=INTEGER}
+               , #{markPrice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{place,jdbcType=VARCHAR}
+               , #{bestSeller,jdbcType=BIT}, #{newProduct,jdbcType=BIT}, #{takeOff,jdbcType=BIT}
+               , #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{detail,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.sfh.shopping.model.Goods"
+            useGeneratedKeys="true">
+        insert into t_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="picUrl != null">pic_url,</if>
+            <if test="spuNo != null">spu_no,</if>
+            <if test="name != null">name,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="brandId != null">brand_id,</if>
+            <if test="markPrice != null">mark_price,</if>
+            <if test="price != null">price,</if>
+            <if test="place != null">place,</if>
+            <if test="bestSeller != null">best_seller,</if>
+            <if test="newProduct != null">new_product,</if>
+            <if test="takeOff != null">take_off,</if>
+            <if test="description != null">desciption,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="detail != null">detail,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="picUrl != null">#{picUrl,jdbcType=VARCHAR},</if>
+            <if test="spuNo != null">#{spuNo,jdbcType=VARCHAR},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="categoryId != null">#{category.id,jdbcType=INTEGER},</if>
+            <if test="brandId != null">#{brand.id,jdbcType=INTEGER},</if>
+            <if test="markPrice != null">#{markPrice,jdbcType=DECIMAL},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="place != null">#{place,jdbcType=VARCHAR},</if>
+            <if test="bestSeller != null">#{bestSeller,jdbcType=BIT},</if>
+            <if test="newProduct != null">#{newProduct,jdbcType=BIT},</if>
+            <if test="takeOff != null">#{takeOff,jdbcType=BIT},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="detail != null">detail,</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.sfh.shopping.model.Goods">
+        update t_goods
+        <set>
+            <if test="picUrl != null">
+                pic_url = #{picUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="spuNo != null">
+                spu_no = #{spuNo,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="category != null and category !=''">
+                category_id = #{category.id,jdbcType=INTEGER},
+            </if>
+            <if test="brand != null and brand !=''">
+                brand_id = #{brand.id,jdbcType=INTEGER},
+            </if>
+            <if test="markPrice != null">
+                mark_price = #{markPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="place != null">
+                place = #{place,jdbcType=VARCHAR},
+            </if>
+            <if test="bestSeller != null">
+                best_seller = #{bestSeller,jdbcType=BIT},
+            </if>
+            <if test="newProduct != null">
+                new_product = #{newProduct,jdbcType=BIT},
+            </if>
+            <if test="takeOff != null">
+                take_off = #{takeOff,jdbcType=BIT},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="detail != null">
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.sfh.shopping.model.Goods">
+        update t_goods
+        set pic_url     = #{picUrl,jdbcType=VARCHAR},
+            spu_no      = #{spuNo,jdbcType=VARCHAR},
+            name        = #{name,jdbcType=VARCHAR},
+            category_id = #{category.id,jdbcType=INTEGER},
+            brand_id    = #{brand.id,jdbcType=INTEGER},
+            mark_price  = #{markPrice,jdbcType=DECIMAL},
+            price       = #{price,jdbcType=DECIMAL},
+            place       = #{place,jdbcType=VARCHAR},
+            best_seller = #{bestSeller,jdbcType=BIT},
+            new_product = #{newProduct,jdbcType=BIT},
+            take_off    = #{takeOff,jdbcType=BIT},
+            description = #{description,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            detail = #{detail,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

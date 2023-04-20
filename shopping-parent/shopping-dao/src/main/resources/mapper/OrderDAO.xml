@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.OrderDAO">
+
+    <resultMap id="BaseResultMap" type="com.sfh.shopping.model.Order">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="total" column="total" jdbcType="DECIMAL"/>
+        <result property="payType" column="pay_type" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtUpdate" column="gmt_update" jdbcType="TIMESTAMP"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+
+        <collection property="orderItems" column="order_id"
+                    select="com.sfh.shopping.dao.OrderItemDAO.findByOrderId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,user_id,
+        total,pay_type,`name`,
+        email,phone,address,
+        state,gmt_create,gmt_update,
+        description
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order
+        <where>
+            <if test="id!=null">
+                and id = #{id}
+            </if>
+            <if test="orderId!=null">
+                and order_id = #{orderId}
+            </if>
+            <if test="state!=null and state !=''">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order
+        where id = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_order
+        where id = #{id}
+    </delete>
+
+    <!--创建一个订单-->
+    <insert id="insert" parameterType="com.sfh.shopping.model.Order"
+            keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into t_order
+        ( id, order_id, user_id
+        , total, pay_type, name
+        , email, phone, address
+        , state, gmt_create, gmt_update
+        , description)
+        values ( #{id}, #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}
+               , #{total,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}
+               , #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
+               , #{state,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtUpdate,jdbcType=TIMESTAMP}
+               , #{description,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.sfh.shopping.model.Order"
+            useGeneratedKeys="true">
+        insert into t_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="total != null">total,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="name != null">name,</if>
+            <if test="email != null">email,</if>
+            <if test="phone != null">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="state != null">state,</if>
+            <if test="gmtCreate != null">gmt_create,</if>
+            <if test="gmtUpdate != null">gmt_update,</if>
+            <if test="description != null">description,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="orderId != null">#{orderId,jdbcType=VARCHAR},</if>
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="total != null">#{total,jdbcType=DECIMAL},</if>
+            <if test="payType != null">#{payType,jdbcType=VARCHAR},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="phone != null">#{phone,jdbcType=VARCHAR},</if>
+            <if test="address != null">#{address,jdbcType=VARCHAR},</if>
+            <if test="state != null">#{state,jdbcType=VARCHAR},</if>
+            <if test="gmtCreate != null">#{gmtCreate,jdbcType=TIMESTAMP},</if>
+            <if test="gmtUpdate != null">#{gmtUpdate,jdbcType=TIMESTAMP},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.sfh.shopping.model.Order">
+        update t_order
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="total != null">
+                total = #{total,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                pay_type = #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtUpdate != null">
+                gmt_update = #{gmtUpdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sfh.shopping.model.Order">
+        update t_order
+        set order_id    = #{orderId,jdbcType=VARCHAR},
+            user_id     = #{userId,jdbcType=INTEGER},
+            total       = #{total,jdbcType=DECIMAL},
+            pay_type    = #{payType,jdbcType=VARCHAR},
+            name        = #{name,jdbcType=VARCHAR},
+            email       = #{email,jdbcType=VARCHAR},
+            phone       = #{phone,jdbcType=VARCHAR},
+            address     = #{address,jdbcType=VARCHAR},
+            state       = #{state,jdbcType=VARCHAR},
+            gmt_create  = #{gmtCreate,jdbcType=TIMESTAMP},
+            gmt_update  = #{gmtUpdate,jdbcType=TIMESTAMP},
+            description = #{description,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+
+    <update id="updateStateByIds">
+        update t_order set state = #{state}
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

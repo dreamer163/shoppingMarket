@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.CustomerDAO">
+
+    <select id="findByUsername" resultType="com.sfh.shopping.model.Customer">
+        select id,pic_url, username, password, locked, enabled, description, last_login_time
+        from t_security_customer
+        where username = #{username} limit 0,1
+    </select>
+
+    <select id="findAll" resultType="com.sfh.shopping.model.Customer">
+        select id,pic_url,username,password,locked,enabled,description,last_login_time
+        from t_security_customer
+        <where>
+            <if test="id!=null">
+                and id =#{id}
+            </if>
+            <if test="username!=null">
+                <bind name="usernameLike" value="'%'+username+'%'"/>
+                and username like #{usernameLike}
+            </if>
+
+            <if test="enabled!=null">
+                and enabled =#{enabled}
+            </if>
+            <if test="locked!=null">
+                and locked =#{locked}
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <select id="findById" resultType="com.sfh.shopping.model.Customer">
+        select id,pic_url, username, password, locked, enabled, description, last_login_time
+        from t_security_customer
+        where id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into t_security_user (pic_url,username, password, locked, enabled, description)
+        values (#{picUrl},#{username}, #{password}, #{locked}, #{enabled}, #{description})
+    </insert>
+
+    <update id="update">
+        update t_security_customer
+        <set>
+            pic_url=#{picUrl},
+            username=#{username},
+            password=#{password},
+            locked=#{locked},
+            enabled=#{enabled},
+            description=#{description}
+        </set>
+        where id =#{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from t_security_user where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

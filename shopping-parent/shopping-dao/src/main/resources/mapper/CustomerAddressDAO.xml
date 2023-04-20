@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.CustomerAddressDAO">
+<!--   <cache type="org.mybatis.caches.caffeine.CaffeineCache" flushInterval="14400"/>-->
+
+    <resultMap id="BaseResultMap" type="com.sfh.shopping.model.CustomerAddress">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+
+        <!--省市区一对一关联，查询地址部件-->
+        <association property="province" column="province_id" select="findAddressPartById"/>
+        <association property="city" column="city_id" select="findAddressPartById"/>
+        <association property="area" column="area_id" select="findAddressPartById"/>
+    </resultMap>
+
+    <!--地址部分，省市区的映射-->
+    <resultMap id="AddressPartMap" type="AddressPart">
+        <id property="id" column="cri_id"/>
+        <result property="name" column="cri_name"/>
+        <collection property="children" column="cri_id" select="findAddressPartsByParentId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,`name`,
+        phone,email,province_id,
+        city_id,area_id,address,
+        description
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user_address
+        where id = #{id}
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user_address
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_user_address
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.sfh.shopping.model.CustomerAddress"
+            useGeneratedKeys="true">
+        insert into t_user_address
+        ( id, user_id, name
+        , phone, email, province_id
+        , city_id, area_id, address
+        , description)
+        values ( #{id}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}
+               , #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{provinceId,jdbcType=INTEGER}
+               , #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}
+               , #{description,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.sfh.shopping.model.CustomerAddress"
+            useGeneratedKeys="true">
+        insert into t_user_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="provinceId != null">province_id,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="areaId != null">area_id,</if>
+            <if test="address != null">address,</if>
+            <if test="description != null">description,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="phone != null">#{phone,jdbcType=VARCHAR},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="provinceId != null">#{provinceId,jdbcType=INTEGER},</if>
+            <if test="cityId != null">#{cityId,jdbcType=INTEGER},</if>
+            <if test="areaId != null">#{areaId,jdbcType=INTEGER},</if>
+            <if test="address != null">#{address,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.sfh.shopping.model.CustomerAddress">
+        update t_user_address
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                `description` = #{description,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey"
+            parameterType="com.sfh.shopping.model.CustomerAddress">
+        update t_user_address
+        set user_id     = #{userId,jdbcType=INTEGER},
+            name        = #{name,jdbcType=VARCHAR},
+            phone       = #{phone,jdbcType=VARCHAR},
+            email       = #{email,jdbcType=VARCHAR},
+            province_id = #{provinceId,jdbcType=INTEGER},
+            city_id     = #{cityId,jdbcType=INTEGER},
+            area_id     = #{areaId,jdbcType=INTEGER},
+            address     = #{address,jdbcType=VARCHAR},
+            description = #{description,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+
+    <select id="findAddressPartById" resultMap="AddressPartMap" useCache="true">
+        select cri_id, cri_name
+        from t_cn_region_info
+        where cri_id = #{id}
+    </select>
+
+    <!--根据父id查询所有地址部件-->
+    <select id="findAddressPartsByParentId" resultMap="AddressPartMap" useCache="true">
+        select cri_id, cri_name
+        from t_cn_region_info
+        where cri_parent_id = #{id}
+    </select>
+
+    <select id="findAllByProvinces" resultMap="AddressPartMap" useCache="true">
+        select id as cri_id, `name` as cri_name
+        from v_address1
+    </select>
+
+    <!--查询某个省的市-->
+    <select id="findAllCitiesByProvinceId" resultMap="AddressPartMap" useCache="true">
+        select id as cri_id, `name` as cri_name
+        from v_address2
+        where parent_id = #{provinceId}
+    </select>
+
+    <!--查询某个市的区-->
+    <select id="findAllAreasByCityId" resultMap="AddressPartMap" useCache="true">
+        select id as cri_id, `name` as cri_name
+        from v_address3
+        where parent_id = #{cityId}
+    </select>
+</mapper>

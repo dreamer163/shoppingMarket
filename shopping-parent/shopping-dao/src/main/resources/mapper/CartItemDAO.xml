@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.CartItemDAO">
+
+    <resultMap id="BaseResultMap" type="com.sfh.shopping.model.CartItem">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="amount" column="amount" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" />
+
+        <association property="good" column="good_id" select="com.sfh.shopping.dao.GoodsDAO.selectByPrimaryKey"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,good_id,amount
+    </sql>
+
+    <select id="findByIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_cart
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="findAllByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_cart
+        where user_id = #{userId}
+    </select>
+
+    <select id="findByUserIdAndGoodId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_cart
+        where user_id = #{userId} and good_id = #{goodId}
+    </select>
+
+    <insert id="insert" parameterType="CartItem">
+        insert into t_cart (user_id, good_id, amount)
+        values (#{userId},#{good.id},#{amount})
+    </insert>
+
+    <update id="update" parameterType="CartItem">
+        update t_cart
+        set user_id = #{userId},
+            good_id = #{good.id},
+            amount  = #{amount}
+        where id = #{id}
+    </update>
+
+    <update id="updateAmount" parameterType="CartItem">
+        update t_cart
+        set amount = #{amount}
+        where user_id = #{userId}
+          and good_id = #{good.id}
+    </update>
+
+
+    <delete id="deleteById">
+        delete from t_cart where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from t_cart where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

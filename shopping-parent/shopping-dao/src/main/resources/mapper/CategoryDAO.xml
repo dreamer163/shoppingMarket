@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.CategoryDAO">
+
+    <resultMap id="CategoryMap" type="Category">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="icon_class" property="iconClass"/>
+        <result column="seq" property="seq"/>
+        <result column="description" property="description"/>
+        <association property="parent" column="parent_id" select="findById"/>
+        <collection property="children" column="id" select="findByParentId"/>
+    </resultMap>
+
+    <!--查询全部-->
+    <select id="findAll" resultMap="CategoryMap" >
+        select id,name,icon_class,parent_id,seq,`description`
+        from t_goods_category
+        <where>
+            <if test="id!=null">
+                and id = #{id}
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <!--根据编号查询-->
+    <select id="findById" resultMap="CategoryMap" >
+        select id, name, icon_class, parent_id, seq, `description`
+        from t_goods_category
+        where id = #{id}
+    </select>
+
+    <!--查询某节点的所有子节点-->
+    <select id="findByParentId" resultMap="CategoryMap" >
+        select id, name, icon_class, parent_id, seq, `description`
+        from t_goods_category
+        where parent_id = #{pid}
+    </select>
+
+    <!--保存类别信息-->
+    <insert id="save" keyProperty="id" useGeneratedKeys="true" >
+        insert into t_goods_category (name, icon_class, parent_id, seq, `description`)
+        values (#{name}, #{iconClass}, #{parent.id}, #{seq}, #{description})
+    </insert>
+
+    <!--修改类别信息-->
+    <update id="update" >
+        update t_goods_category
+        <set>
+            name = #{name},
+            icon_class = #{iconClass},
+            parent_id = #{parent.id},
+            seq=#{seq},
+            `description`= #{description}
+        </set>
+        <where>
+            and id = #{id}
+        </where>
+    </update>
+
+    <!--批量删除-->
+    <delete id="deleteByIds">
+        delete from t_goods_category where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

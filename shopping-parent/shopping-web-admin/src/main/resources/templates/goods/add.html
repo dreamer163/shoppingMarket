@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台商品信息新增</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/framework/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/framework/js/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        const ctx = /*[[${#request.contextPath}]]*/"/admin";
+    </script>
+    <!--ueditor-->
+    <script type="text/javascript" th:src="@{/framework/ueditor/ueditor.config.js}"></script>
+    <script type="text/javascript" th:src="@{/framework/ueditor/ueditor.all.js}"></script>
+
+    <script th:src="@{/goods/add.js}"></script>
+    <style>
+        .product-pic {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="container-md">
+    <form id="good-form" method="post" enctype="multipart/form-data">
+        <div class="mb-2">
+            <label class="form-label" for="spuNo">spu编码：</label>
+            <input type="text" class="form-control" id="spuNo"
+                   name="spuNo" autocomplete="off" placeholder="请输入商品编号">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="name">商品名称：</label>
+            <input type="text" class="form-control" id="name"
+                   name="name" autocomplete="off" placeholder="请输入商品名称">
+        </div>
+
+        <div class="mb-2 row">
+            <div class="col">
+                <label class="form-label" for="brandId">所属品牌：</label>
+                <select class="form-select" id="brandId" name="brandId">
+                    <option th:value="${b.id}" th:each="b:${brands}"
+                            th:text="${b.name}"></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label" for="categoryId">所属类别：</label>
+                <select class="form-select" id="categoryId" name="categoryId">
+                    <option th:value="${c.id}" th:each="c:${categories}"
+                            th:text="${c.name}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-2 row">
+            <div class="col">
+                <label class="form-label" for="markPrice">标价：</label>
+                <input class="form-control" type="text" id="markPrice"
+                       name="markPrice" autocomplete="off">
+            </div>
+            <div class="col">
+                <label class="form-label" for="price">实售价：</label>
+                <input class="form-control" type="text" id="price"
+                       name="price" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <label class="form-label" for="newProduct">是否新品：</label>
+                <select class="form-control" id="newProduct" name="newProduct">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label" for="bestSeller">是否热销：</label>
+                <select class="form-control" id="bestSeller" name="bestSeller">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label" for="takeOff">是否下架：</label>
+                <select class="form-control" id="takeOff" name="takeOff">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="pic">代表图片：</label>
+            <input type="file" class="form-control" id="pic" name="pic"
+                   autocomplete="off" placeholder="请选择要上传的商品代表文件">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="description">商品备注：</label>
+            <textarea class="form-control" id="description"
+                      name="description" autocomplete="off" placeholder="请输入商品备注"></textarea>
+        </div>
+        <div class="mb-2">
+            <script id="editor" name="detail" type="text/plain" style="height:300px;"></script>
+        </div>
+
+    </form>
+
+</body>
+</html>

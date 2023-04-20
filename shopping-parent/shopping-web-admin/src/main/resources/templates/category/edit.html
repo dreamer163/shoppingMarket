@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增商品类别</title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/framework/favicon.ico}">
+    <link rel="stylesheet" type="text/css" th:href="@{/framework/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/framework/js/jquery.min.js}"></script>
+    <script th:src="@{/framework/layui/layer/layer.js}"></script>
+    <script th:inline="javascript">
+        const ctx = /*[[${#request.contextPath}]]*/"/admin";
+    </script>
+    <script type="text/javascript" th:src="@{/framework/js/uix.js}"></script>
+    <script type="text/javascript" th:src="@{/category/edit.js}"></script>
+</head>
+<body>
+<div class="container-md">
+    <form id="category-form" method="post">
+        <div class="mb-2">
+            <label class="form-label" for="name">类别名称：</label>
+            <input type="text" class="form-control" id="name" name="name" autocomplete="off"
+                   placeholder="请输入类别名称" th:value="${category.name}">
+        </div>
+        <div class="mb-2">
+            <label class="form-label" for="iconClass">字体图标：</label>
+            <input type="text" class="form-control" id="iconClass" name="icon-class" autocomplete="off"
+                   placeholder="请输入类别字体图标" th:value="${category.iconClass}">
+        </div>
+<!--        <div class="mb-2">-->
+<!--            <label class="form-label" for="parent-id">父类别</label>-->
+<!--            <input type="text" class="form-control" id="parent-id" name="parent-id" autocomplete="off"-->
+<!--                   th:value="${category.parent.id}">-->
+<!--        </div>-->
+
+        <div class="mb-2">
+            <label class="form-label" for="seq">顺序号：</label>
+            <input type="text" class="form-control" id="seq" name="seq" autocomplete="off" th:value="${category.seq}">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="description">备注：</label>
+            <textarea class="form-control" id="description" name="description" autocomplete="off"
+                      th:text="${category.description}"></textarea>
+            <input type="hidden" name="id" th:value="${category.id}">
+        </div>
+    </form>
+</div>
+</body>
+</html>

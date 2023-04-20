@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sfh.shopping.dao.OrderItemDAO">
+
+    <resultMap id="BaseResultMap" type="com.sfh.shopping.model.OrderItem">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+
+        <result property="goodName" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodPic" column="good_pic" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="amount" column="amount" jdbcType="INTEGER"/>
+        <result property="total" column="total" jdbcType="DECIMAL"/>
+
+        <association property="good" column="good_id" select="com.sfh.shopping.dao.GoodsDAO.selectByPrimaryKey"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,good_id,
+        good_name,good_pic,price,
+        amount,total
+    </sql>
+
+    <select id="findByOrderId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order_item
+        where order_id = #{oderId}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order_item
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_order_item
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.sfh.shopping.model.OrderItem"
+            useGeneratedKeys="true">
+        insert into t_order_item
+        ( id, order_id, good_id
+        , good_name, good_pic, price
+        , amount, total)
+        values ( #{id,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{good.id,jdbcType=INTEGER}
+               , #{goodName,jdbcType=VARCHAR}, #{goodPic,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}
+               , #{amount,jdbcType=INTEGER}, #{total,jdbcType=DECIMAL})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.sfh.shopping.model.OrderItem"
+            useGeneratedKeys="true">
+        insert into t_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="goodId != null">good_id,</if>
+            <if test="goodName != null">good_name,</if>
+            <if test="goodPic != null">good_pic,</if>
+            <if test="price != null">price,</if>
+            <if test="amount != null">amount,</if>
+            <if test="total != null">total,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="orderId != null">#{orderId,jdbcType=VARCHAR},</if>
+            <if test="goodId != null">#{good.id,jdbcType=INTEGER},</if>
+            <if test="goodName != null">#{goodName,jdbcType=VARCHAR},</if>
+            <if test="goodPic != null">#{goodPic,jdbcType=VARCHAR},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="amount != null">#{amount,jdbcType=INTEGER},</if>
+            <if test="total != null">#{total,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.sfh.shopping.model.OrderItem">
+        update t_order_item
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodId != null">
+                good_id = #{good.id,jdbcType=INTEGER},
+            </if>
+            <if test="goodName != null">
+                good_name = #{goodName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodPic != null">
+                good_pic = #{goodPic,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=INTEGER},
+            </if>
+            <if test="total != null">
+                total = #{total,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey"
+            parameterType="com.sfh.shopping.model.OrderItem">
+        update t_order_item
+        set order_id  = #{orderId,jdbcType=VARCHAR},
+            good_id   = #{good.id,jdbcType=INTEGER},
+            good_name = #{goodName,jdbcType=VARCHAR},
+            good_pic  = #{goodPic,jdbcType=VARCHAR},
+            price     = #{price,jdbcType=DECIMAL},
+            amount    = #{amount,jdbcType=INTEGER},
+            total     = #{total,jdbcType=DECIMAL}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

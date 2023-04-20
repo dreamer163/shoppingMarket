@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌新增</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/framework/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/framework/js/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        const ctx = /*[[${#request.contextPath}]]*/"/admin";
+        const upload_server = /*[[${upload_server_url}]]*/"";
+        const logoUrl =/*[[${brand.picUrl}]]*/"";
+        const error = /*[[${error}]]*/"";
+    </script>
+    <script th:src="@{/brand/edit.js}"></script>
+    <style>
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ccc;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+    </style>
+</head>
+<body>
+<div class="container-md">
+    <form id="brand-form" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">品牌名称：</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="请输入品牌名称"
+            th:value="${brand.name}">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="pic">品牌LOGO：</label>
+            <input type="file" class="form-control" id="pic" name="pic"
+                   autocomplete="off" placeholder="请选择要上传的logo文件">
+
+            <div class="brand-logo"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">备注：</label>
+            <textarea id="description" name="description" class="form-control"
+                      placeholder="请输入品牌备注" th:text="${brand.description}"></textarea>
+        </div>
+
+        <input type="hidden" name="id" th:value="${brand.id}">
+
+    </form>
+</div>
+</body>
+</html>

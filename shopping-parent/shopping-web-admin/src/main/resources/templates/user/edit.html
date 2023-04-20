@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台用户修改</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/framework/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/framework/js/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        const ctx = /*[[${#request.contextPath}]]*/"/admin";
+        const error =/*[[${error}]]*/"";
+        const userEnabled =/*[[${user?.enabled}]]*/"true";
+        const userLocked =/*[[${user?.locked}]]*/"true";
+        const upload_server = /*[[${upload_server_url}]]*/"";
+        const logoUrl =/*[[${user.picUrl}]]*/"";
+    </script>
+    <script th:src="@{/user/edit.js}"></script>
+    <style>
+        .user-pic {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ccc;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+    </style>
+</head>
+<body>
+<div class="container-md">
+    <form id="user-form" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">用户名：</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名"
+                   th:value="${user==null?'':user.username}">
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">密码：</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="重置密码" th:value="${user==null?'':user.password}">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label" for="pic">头像：</label>
+            <input type="file" class="form-control" id="pic" name="pic"
+                   autocomplete="off" placeholder="请选择要上传的logo文件">
+
+            <div class="user-pic"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="enabled" class="form-label">是否启用：</label>
+            <select id="enabled" name="enabled" class="form-control">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="locked" class="form-label">是否锁定：</label>
+            <select id="locked" name="locked" class="form-control">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">备注：</label>
+            <textarea id="description" name="description" class="form-control" th:text="${user?.description}"></textarea>
+
+            <!--隐藏域-->
+            <input type="hidden" id="id" name="id" th:value="${user?.id}">
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

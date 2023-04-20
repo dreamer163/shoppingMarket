@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>shopping购物商城登录页面</title>
+	<!-- Meta tag Keywords -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<meta name="keywords" content=""/>
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<!-- Meta tag Keywords -->
+	<!-- css files -->
+	<link rel="stylesheet" th:href="@{/framework/css1/style.css}" type="text/css" media="all" />
+	<!-- Style-CSS -->
+	<link rel="stylesheet" th:href="@{/framework/css1/fontawesome-all.css}">
+	<!-- Font-Awesome-Icons-CSS -->
+	<!-- //css files -->
+	<!-- web-fonts -->
+	<link href="http://maxcdn.bootstrapcdn.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+	<link href="http://maxcdn.bootstrapcdn.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+	<!-- //web-fonts -->
+	<!-- inject js end -->
+	<script th:inline="javascript">
+		const ctx = /*[[${#request.contextPath}]]*/"";
+		const error =/*[[${error}]]*/"";
+	</script>
+
+	<script type="text/javascript" th:src="@{/framework/lib/layer/layer.js}"></script>
+	<script th:src="@{/user/login.js}"></script>
+</head>
+
+<body>
+	<!-- bg effect -->
+	<div id="bg">
+		<canvas></canvas>
+		<canvas></canvas>
+		<canvas></canvas>
+	</div>
+	<!-- //bg effect -->
+	<!-- title -->
+	<h1>shopping购物商城后台登录</h1>
+	<!-- //title -->
+	<!-- content -->
+	<div class="sub-main-w3">
+		<form id="login-form" th:action="@{/user/login}" method="post">
+			<h2>立即登录
+				<i class="fas fa-level-down-alt"></i>
+			</h2>
+			<div class="form-style-agile">
+				<label>
+					<i class="fas fa-user"></i>
+					账号
+				</label>
+				<input placeholder="请输入用户账号" name="username" type="text" required="">
+			</div>
+			<div class="form-style-agile">
+				<label>
+					<i class="fas fa-unlock-alt"></i>
+					密码
+				</label>
+				<input placeholder="请输入用户密码" name="password" type="password" required="">
+			</div>
+			<!-- checkbox -->
+			<div class="wthree-text">
+				<ul>
+					<li>
+						<label class="anim">
+							<input type="checkbox" class="checkbox" required="">
+							<span>记住密码</span>
+						</label>
+					</li>
+					<li>
+						<a href="#">忘记密码</a>
+					</li>
+				</ul>
+			</div>
+			<!-- //checkbox -->
+			<input type="submit" id="login-btn" value="登录">
+		</form>
+	</div>
+	<!-- //content -->
+
+	<!-- copyright -->
+	<div class="footer">
+		<p>20190300965-青岛农业大学邵福豪-毕设</a></p>
+	</div>
+	<!-- //copyright -->
+
+	<!-- Jquery -->
+	<script th:src="@{/framework/js1/jquery-3.3.1.min.js}"></script>
+	<!-- //Jquery -->
+
+	<!-- effect js -->
+	<script th:src="@{/framework/js1/canva_moving_effect.js}"></script>
+	<!-- //effect js -->
+
+</body>
+
+</html>
